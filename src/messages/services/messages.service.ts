@@ -7,11 +7,12 @@ import { Ticket } from '../../tickets/entities/ticket.entity';
 
 @Injectable()
 export class MessagesService {
-  constructor(
-    @InjectModel(Message) private messageModel: typeof Message,
-  ) {}
+  constructor(@InjectModel(Message) private messageModel: typeof Message) {}
 
-  async create(createMessageDto: CreateMessageDto, userId: string): Promise<Message> {
+  async create(
+    createMessageDto: CreateMessageDto,
+    userId: string,
+  ): Promise<Message> {
     return this.messageModel.create({ ...createMessageDto, userId } as any);
   }
 
@@ -38,4 +39,3 @@ export class MessagesService {
     await message.destroy();
   }
 }
-

@@ -48,7 +48,10 @@ __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new department (Superadmin only)' }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: 'The department has been successfully created.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'The department has been successfully created.',
+    }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -77,7 +80,10 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Update a department by ID (Superadmin only)' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'The department has been successfully updated.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'The department has been successfully updated.',
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Param)('id')),
@@ -90,7 +96,10 @@ __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a department by ID (Superadmin only)' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'The department has been successfully deleted.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'The department has been successfully deleted.',
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Param)('id')),
@@ -101,7 +110,7 @@ __decorate([
 exports.DepartmentsController = DepartmentsController = __decorate([
     (0, swagger_1.ApiTags)('Departments'),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.UserGuard, roles_guard_1.RolesGuard),
     (0, common_1.Controller)('departments'),
     __metadata("design:paramtypes", [departments_service_1.DepartmentsService])
 ], DepartmentsController);

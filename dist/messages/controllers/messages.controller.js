@@ -44,7 +44,10 @@ __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.USER, user_entity_1.UserRoleEnum.SUPPORT, user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new message' }),
-    (0, swagger_1.ApiResponse)({ status: 201, description: 'The message has been successfully created.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'The message has been successfully created.',
+    }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
@@ -56,7 +59,10 @@ __decorate([
     (0, common_1.Get)('ticket/:ticketId'),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.USER, user_entity_1.UserRoleEnum.SUPPORT, user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve all messages for a ticket' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Returns all messages for the specified ticket.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Returns all messages for the specified ticket.',
+    }),
     __param(0, (0, common_1.Param)('ticketId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -77,7 +83,10 @@ __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a message by ID (Superadmin only)' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'The message has been successfully deleted.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'The message has been successfully deleted.',
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Message not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Param)('id')),
@@ -88,7 +97,7 @@ __decorate([
 exports.MessagesController = MessagesController = __decorate([
     (0, swagger_1.ApiTags)('Messages'),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.UserGuard, roles_guard_1.RolesGuard),
     (0, common_1.Controller)('messages'),
     __metadata("design:paramtypes", [messages_service_1.MessagesService])
 ], MessagesController);

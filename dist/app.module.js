@@ -56,7 +56,7 @@ exports.AppModule = AppModule = __decorate([
             app_service_1.AppService,
             {
                 provide: core_1.APP_GUARD,
-                useClass: jwt_auth_guard_1.JwtAuthGuard,
+                useClass: jwt_auth_guard_1.UserGuard,
             },
         ],
     })

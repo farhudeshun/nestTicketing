@@ -11,44 +11,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateUserDto = void 0;
 const class_validator_1 = require("class-validator");
-const swagger_1 = require("@nestjs/swagger");
 const user_entity_1 = require("../entities/user.entity");
 class UpdateUserDto {
+    name;
     email;
     password;
     role;
 }
 exports.UpdateUserDto = UpdateUserDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({
-        description: 'User email address',
-        example: 'updateduser@example.com',
-        format: 'email',
-    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEmail)({}, { message: 'Please provide a valid email address' }),
-    (0, class_validator_1.MaxLength)(100, { message: 'Email can be at most 100 characters long' }),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "email", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({
-        description: 'User password',
-        example: 'NewStrongPass123',
-        minLength: 6,
-    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(6, { message: 'Password must be at least 6 characters long' }),
+    (0, class_validator_1.MinLength)(6),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "password", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({
-        description: 'User role',
-        example: 'support',
-        enum: user_entity_1.UserRoleEnum,
-    }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(user_entity_1.UserRoleEnum, { message: 'Invalid user role' }),
+    (0, class_validator_1.IsEnum)(user_entity_1.UserRoleEnum),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "role", void 0);
 //# sourceMappingURL=update-user.dto.js.map

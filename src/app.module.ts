@@ -8,7 +8,7 @@ import { UsersModule } from './users/users.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { MessagesModule } from './messages/messages.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { UserGuard } from './auth/guards/jwt-auth.guard';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -41,7 +41,7 @@ import { AppService } from './app.service';
     AppService,
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: UserGuard,
     },
   ],
 })

@@ -33,7 +33,7 @@ let UsersService = class UsersService {
     async findByEmail(email) {
         return this.userModel.findOne({ where: { email } });
     }
-    async update(id, updateUserDto) {
+    async updateUser(id, updateUserDto) {
         return this.userModel.update(updateUserDto, {
             where: { id },
             returning: true,

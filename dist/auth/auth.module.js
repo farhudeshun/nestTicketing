@@ -43,11 +43,11 @@ exports.AuthModule = AuthModule = __decorate([
             auth_service_1.AuthService,
             jwt_strategy_1.JwtStrategy,
             local_strategy_1.LocalStrategy,
-            jwt_auth_guard_1.JwtAuthGuard,
+            jwt_auth_guard_1.UserGuard,
             local_auth_guard_1.LocalAuthGuard,
             roles_guard_1.RolesGuard,
         ],
-        exports: [auth_service_1.AuthService, jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard],
+        exports: [auth_service_1.AuthService, jwt_auth_guard_1.UserGuard, roles_guard_1.RolesGuard],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

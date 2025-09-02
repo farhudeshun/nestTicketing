@@ -6,9 +6,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User) private userModel: typeof User,
-  ) {}
+  constructor(@InjectModel(User) private userModel: typeof User) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     return this.userModel.create(createUserDto as any);
@@ -26,7 +24,10 @@ export class UsersService {
     return this.userModel.findOne({ where: { email } });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<[number, User[]]> {
+  async updateUser(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<[number, User[]]> {
     return this.userModel.update(updateUserDto, {
       where: { id },
       returning: true,
@@ -38,4 +39,3 @@ export class UsersService {
     await user.destroy();
   }
 }
-

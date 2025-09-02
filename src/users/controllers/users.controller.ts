@@ -1,27 +1,18 @@
 import {
   Controller,
   Get,
+  Post,
+  Put,
+  Delete,
   Param,
-  ParseIntPipe,
-  Query,
-  Req,
+  Body,
   UseGuards,
 } from '@nestjs/common';
-import { SearchUserAuditDto } from './dtos/user.dto';
-import { UsersService } from './services/user.service';
-
-import { SuccessResponse } from 'src/libs/filters/http-exceptions';
+import { UsersService } from '../services/users.service';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserGuard } from 'src/libs/auth.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-
-import { Request } from 'express';
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import {
-  GiftCardExchange,
-  MessagePattern,
-  RoutingKeys,
-  UserDto,
-} from '@ngn-net/giftcard-shared';
-import { UserGuard } from 'src//libs/auth.guard';
 
 @UseGuards(UserGuard)
 @Controller('/user')
@@ -29,27 +20,37 @@ export class UserController {
   constructor(private readonly userService: UsersService) {}
 
   @ApiBearerAuth('JWT')
-  @ApiOperation({ summary: 'search user history' })
-  @Get('')
-  async getUserAudit(
-    @Query() filters: SearchUserAuditDto,
-    @Req() req: Request,
-  ) {
-    const result = await this.userService.getUserAudit(filters);
-    return new SuccessResponse({ result: result.result, count: result.count });
+  @ApiOperation({ summary: 'Create a new user' })
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
-  @RabbitSubscribe({
-    exchange: GiftCardExchange.USER_EXCHANGE,
-    routingKey: RoutingKeys.USER_QUEUE,
-    queue: 'giftcard-user-queue',
-    queueOptions: { durable: true },
-  })
-  async onUserQueueMessage(message: MessagePattern<UserDto>) {
-    console.log('message', message);
-    if (message.messageType === 'create')
-      await this.userService.addUser(message.data, message.message);
-    else if (message.messageType === 'update')
-      await this.userService.updateUser(message.data, message.message);
+  @ApiBearerAuth('JWT')
+  @ApiOperation({ summary: 'Get all users' })
+  @Get()
+  async findAll() {
+    return this.userService.findAll();
+  }
+
+  @ApiBearerAuth('JWT')
+  @ApiOperation({ summary: 'Get user by ID' })
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.userService.findOne(id);
+  }
+
+  @ApiBearerAuth('JWT')
+  @ApiOperation({ summary: 'Update user' })
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(id, updateUserDto);
+  }
+
+  @ApiBearerAuth('JWT')
+  @ApiOperation({ summary: 'Delete user' })
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return this.userService.remove(id);
   }
 }

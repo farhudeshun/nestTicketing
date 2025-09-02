@@ -1,6 +1,6 @@
-import { UserRoleEnum } from '../entities/user.entity';
 export declare class UpdateUserDto {
-    email?: string;
-    password?: string;
-    role?: UserRoleEnum;
+    readonly name?: string;
+    readonly email?: string;
+    readonly password?: string;
+    readonly role?: string;
 }
