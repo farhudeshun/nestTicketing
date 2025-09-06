@@ -39,7 +39,7 @@ export class Ticket extends Model<Ticket> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.BIGINT)
-  id: number;
+  declare id: number;
 
   @AllowNull(false)
   @Column(DataType.STRING(255))
@@ -88,9 +88,8 @@ export class Ticket extends Model<Ticket> {
   messages: Message[];
 
   @CreatedAt
-  createdAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
-  updatedAt: Date;
+  declare updatedAt: Date;
 }
-

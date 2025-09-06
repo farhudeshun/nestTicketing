@@ -14,7 +14,6 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const user_entity_1 = require("./user.entity");
 const user_role_entity_1 = require("./user-role.entity");
 let Role = class Role extends sequelize_typescript_1.Model {
-    id;
     name;
     users;
 };

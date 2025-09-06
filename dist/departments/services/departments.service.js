@@ -16,6 +16,7 @@ exports.DepartmentsService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const department_entity_1 = require("../entities/department.entity");
+const common_2 = require("@nestjs/common");
 let DepartmentsService = class DepartmentsService {
     departmentModel;
     constructor(departmentModel) {
@@ -27,7 +28,7 @@ let DepartmentsService = class DepartmentsService {
     async findAll() {
         return this.departmentModel.findAll();
     }
-    async findOne(id) {
+    async findById(id) {
         return this.departmentModel.findByPk(id);
     }
     async update(id, updateDepartmentDto) {
@@ -37,7 +38,10 @@ let DepartmentsService = class DepartmentsService {
         });
     }
     async remove(id) {
-        const department = await this.findOne(id);
+        const department = await this.findById(id);
+        if (!department) {
+            throw new common_2.NotFoundException(`Department with id ${id} not found`);
+        }
         await department.destroy();
     }
 };

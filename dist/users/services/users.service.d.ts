@@ -6,8 +6,8 @@ export declare class UsersService {
     constructor(userModel: typeof User);
     create(createUserDto: CreateUserDto): Promise<User>;
     findAll(): Promise<User[]>;
-    findOne(id: string): Promise<User>;
-    findByEmail(email: string): Promise<User>;
+    findById(id: string): Promise<User | null>;
+    findByEmail(email: string): Promise<User | null>;
     updateUser(id: string, updateUserDto: UpdateUserDto): Promise<[number, User[]]>;
     remove(id: string): Promise<void>;
 }

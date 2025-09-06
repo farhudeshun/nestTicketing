@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Department } from '../entities/department.entity';
 import { CreateDepartmentDto } from '../dto/create-department.dto';
 import { UpdateDepartmentDto } from '../dto/update-department.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class DepartmentsService {
@@ -18,11 +19,14 @@ export class DepartmentsService {
     return this.departmentModel.findAll();
   }
 
-  async findOne(id: string): Promise<Department> {
+  async findById(id: string): Promise<Department | null> {
     return this.departmentModel.findByPk(id);
   }
 
-  async update(id: string, updateDepartmentDto: UpdateDepartmentDto): Promise<[number, Department[]]> {
+  async update(
+    id: string,
+    updateDepartmentDto: UpdateDepartmentDto,
+  ): Promise<[number, Department[]]> {
     return this.departmentModel.update(updateDepartmentDto, {
       where: { id },
       returning: true,
@@ -30,8 +34,10 @@ export class DepartmentsService {
   }
 
   async remove(id: string): Promise<void> {
-    const department = await this.findOne(id);
+    const department = await this.findById(id);
+    if (!department) {
+      throw new NotFoundException(`Department with id ${id} not found`);
+    }
     await department.destroy();
   }
 }
-

@@ -20,7 +20,7 @@ export class Department extends Model<Department> {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id: string;
+  declare id: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(100))
@@ -32,4 +32,3 @@ export class Department extends Model<Department> {
   @HasMany(() => Ticket)
   tickets: Ticket[];
 }
-

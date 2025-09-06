@@ -54,7 +54,7 @@ export class ProducerService {
       userId: user.sub,
       username: user.username,
       ipAddress: ip as string,
-      agent: req.headers['user-agent'],
+      agent: req.headers['user-agent'] || 'unknown',
       isVisibleToUser: false,
     };
     await this.publishAuditLog(securityLog);
@@ -68,7 +68,7 @@ export class ProducerService {
       userId: user.sub,
       username: user.username,
       ipAddress: ip as string,
-      agent: req.headers['user-agent'],
+      agent: req.headers['user-agent'] || 'unknown',
       isVisibleToUser: false,
     };
     await this.publishAuditLog(securityLog);

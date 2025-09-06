@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProducerService = void 0;
 const nestjs_rabbitmq_1 = require("@golevelup/nestjs-rabbitmq");
 const common_1 = require("@nestjs/common");
-const security_log_entity_1 = require("src/audit/security-logs/entities/security-log.entity");
+const security_log_entity_1 = require("../../audit/security-logs/entities/security-log.entity");
 const giftcard_shared_1 = require("@ngn-net/giftcard-shared");
 const crypto_1 = require("crypto");
 let ProducerService = class ProducerService {
@@ -49,7 +49,7 @@ let ProducerService = class ProducerService {
             userId: user.sub,
             username: user.username,
             ipAddress: ip,
-            agent: req.headers['user-agent'],
+            agent: req.headers['user-agent'] || 'unknown',
             isVisibleToUser: false,
         };
         await this.publishAuditLog(securityLog);
@@ -63,7 +63,7 @@ let ProducerService = class ProducerService {
             userId: user.sub,
             username: user.username,
             ipAddress: ip,
-            agent: req.headers['user-agent'],
+            agent: req.headers['user-agent'] || 'unknown',
             isVisibleToUser: false,
         };
         await this.publishAuditLog(securityLog);

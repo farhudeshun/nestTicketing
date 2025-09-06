@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RABBIT_URI = exports.CACHE_TIMEOUT = void 0;
 require("dotenv");
-exports.CACHE_TIMEOUT = +process.env.CACHE_TIMEOUT || 120;
+exports.CACHE_TIMEOUT = Number(process.env.CACHE_TIMEOUT || 120);
 const RABBIT_URI = () => {
     const rabbitUri = process.env.RABBIT_URI || 'amqp://127.0.0.1:5672';
     const [credential, hosts] = rabbitUri.split('@');

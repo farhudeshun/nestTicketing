@@ -6,7 +6,7 @@ export declare class DepartmentsService {
     constructor(departmentModel: typeof Department);
     create(createDepartmentDto: CreateDepartmentDto): Promise<Department>;
     findAll(): Promise<Department[]>;
-    findOne(id: string): Promise<Department>;
+    findById(id: string): Promise<Department | null>;
     update(id: string, updateDepartmentDto: UpdateDepartmentDto): Promise<[number, Department[]]>;
     remove(id: string): Promise<void>;
 }

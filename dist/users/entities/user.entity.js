@@ -24,7 +24,6 @@ var UserRoleEnum;
     UserRoleEnum["EWANO"] = "ewano";
 })(UserRoleEnum || (exports.UserRoleEnum = UserRoleEnum = {}));
 let User = class User extends sequelize_typescript_1.Model {
-    id;
     email;
     name;
     password;
@@ -35,8 +34,6 @@ let User = class User extends sequelize_typescript_1.Model {
     assignedTickets;
     messages;
     roles;
-    createdAt;
-    updatedAt;
 };
 exports.User = User;
 __decorate([

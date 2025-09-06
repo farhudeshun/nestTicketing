@@ -36,7 +36,7 @@ export class User extends Model<User> {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id: string;
+  declare id: string;
 
   @Unique
   @AllowNull(false)
@@ -76,9 +76,8 @@ export class User extends Model<User> {
   roles: Role[];
 
   @CreatedAt
-  createdAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
-  updatedAt: Date;
+  declare updatedAt: Date;
 }
-

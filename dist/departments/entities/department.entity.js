@@ -14,7 +14,6 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const user_entity_1 = require("../../users/entities/user.entity");
 const ticket_entity_1 = require("../../tickets/entities/ticket.entity");
 let Department = class Department extends sequelize_typescript_1.Model {
-    id;
     name;
     users;
     tickets;

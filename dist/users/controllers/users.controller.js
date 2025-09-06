@@ -31,7 +31,7 @@ let UserController = class UserController {
         return this.userService.findAll();
     }
     async findOne(id) {
-        return this.userService.findOne(id);
+        return this.userService.findById(id);
     }
     async update(id, updateUserDto) {
         return this.userService.updateUser(id, updateUserDto);

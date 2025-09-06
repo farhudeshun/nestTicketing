@@ -1,6 +1,6 @@
 import 'dotenv';
 
-export const CACHE_TIMEOUT: number = +process.env.CACHE_TIMEOUT || 120;
+export const CACHE_TIMEOUT: number = Number(process.env.CACHE_TIMEOUT || 120);
 
 export const RABBIT_URI = (): string[] => {
   const rabbitUri = process.env.RABBIT_URI || 'amqp://127.0.0.1:5672';

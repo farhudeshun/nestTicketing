@@ -16,6 +16,7 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const sequelize_1 = require("@nestjs/sequelize");
 const user_entity_1 = require("../entities/user.entity");
+const common_2 = require("@nestjs/common");
 let UsersService = class UsersService {
     userModel;
     constructor(userModel) {
@@ -27,7 +28,7 @@ let UsersService = class UsersService {
     async findAll() {
         return this.userModel.findAll();
     }
-    async findOne(id) {
+    async findById(id) {
         return this.userModel.findByPk(id);
     }
     async findByEmail(email) {
@@ -40,7 +41,10 @@ let UsersService = class UsersService {
         });
     }
     async remove(id) {
-        const user = await this.findOne(id);
+        const user = await this.findById(id);
+        if (!user) {
+            throw new common_2.NotFoundException(`User with id ${id} not found`);
+        }
         await user.destroy();
     }
 };

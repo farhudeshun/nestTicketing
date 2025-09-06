@@ -37,7 +37,7 @@ export class UserController {
   @ApiOperation({ summary: 'Get user by ID' })
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+    return this.userService.findById(id);
   }
 
   @ApiBearerAuth('JWT')

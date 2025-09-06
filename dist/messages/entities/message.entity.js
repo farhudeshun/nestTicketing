@@ -14,14 +14,11 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 const ticket_entity_1 = require("../../tickets/entities/ticket.entity");
 const user_entity_1 = require("../../users/entities/user.entity");
 let Message = class Message extends sequelize_typescript_1.Model {
-    id;
     content;
     ticketId;
     userId;
     ticket;
     user;
-    createdAt;
-    updatedAt;
 };
 exports.Message = Message;
 __decorate([

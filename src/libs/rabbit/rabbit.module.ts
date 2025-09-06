@@ -32,7 +32,7 @@ const rabbitUri = RABBIT_URI();
       enableControllerDiscovery: true,
       queues: [
         {
-          name: process.env?.RABBIT_QUEUE,
+          name: process.env.RABBIT_QUEUE ?? 'default queue',
           createQueueIfNotExists: true,
           options: { durable: true },
         },

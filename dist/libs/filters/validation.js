@@ -12,7 +12,7 @@ const http_exceptions_1 = require("./http-exceptions");
 const validatoionErrorToObjectError = (validationError) => {
     const recFunc = (verr, obj) => {
         if (!verr.children?.length)
-            obj[verr.property] = Object.values(verr.constraints).toString();
+            obj[verr.property] = Object.values(verr.constraints ?? {}).toString();
         else {
             for (let i = 0; i < verr.children.length; i++) {
                 const result = recFunc(verr.children[i], {});

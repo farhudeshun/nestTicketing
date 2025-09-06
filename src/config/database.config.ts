@@ -12,7 +12,7 @@ export default registerAs(
   (): SequelizeModuleOptions => ({
     dialect: 'postgres',
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    port: parseInt(process.env.DB_PORT ?? '5432', 10),
     username: process.env.DB_USERNAME || 'sabi',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'mydb',
@@ -22,4 +22,3 @@ export default registerAs(
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
   }),
 );
-

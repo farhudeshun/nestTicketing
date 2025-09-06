@@ -10,7 +10,7 @@ const message_entity_1 = require("../messages/entities/message.entity");
 exports.default = (0, config_1.registerAs)('database', () => ({
     dialect: 'postgres',
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
+    port: parseInt(process.env.DB_PORT ?? '5432', 10),
     username: process.env.DB_USERNAME || 'sabi',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'mydb',

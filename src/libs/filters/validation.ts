@@ -11,7 +11,7 @@ import { JsonResponse } from './http-exceptions';
 const validatoionErrorToObjectError = (validationError: ValidationError) => {
   const recFunc = (verr: ValidationError, obj: {}) => {
     if (!verr.children?.length)
-      obj[verr.property] = Object.values(verr.constraints).toString();
+      obj[verr.property] = Object.values(verr.constraints ?? {}).toString();
     else {
       for (let i = 0; i < verr.children.length; i++) {
         const result = recFunc(verr.children[i], {});

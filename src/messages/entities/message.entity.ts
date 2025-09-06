@@ -23,7 +23,7 @@ export class Message extends Model<Message> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.BIGINT)
-  id: number;
+  declare id: number;
 
   @AllowNull(false)
   @Column(DataType.TEXT)
@@ -46,9 +46,8 @@ export class Message extends Model<Message> {
   user: User;
 
   @CreatedAt
-  createdAt: Date;
+  declare createdAt: Date;
 
   @UpdatedAt
-  updatedAt: Date;
+  declare updatedAt: Date;
 }
-

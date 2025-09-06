@@ -34,7 +34,7 @@ let DepartmentsController = class DepartmentsController {
         return this.departmentsService.findAll();
     }
     findOne(id) {
-        return this.departmentsService.findOne(id);
+        return this.departmentsService.findById(id);
     }
     update(id, updateDepartmentDto) {
         return this.departmentsService.update(id, updateDepartmentDto);

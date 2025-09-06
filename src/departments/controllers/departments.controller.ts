@@ -53,7 +53,7 @@ export class DepartmentsController {
   @ApiResponse({ status: 200, description: 'Returns the department.' })
   @ApiResponse({ status: 404, description: 'Department not found.' })
   findOne(@Param('id') id: string) {
-    return this.departmentsService.findOne(id);
+    return this.departmentsService.findById(id);
   }
 
   @Patch(':id')

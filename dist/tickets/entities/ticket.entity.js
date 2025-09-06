@@ -28,7 +28,6 @@ var TicketPriority;
     TicketPriority["HIGH"] = "high";
 })(TicketPriority || (exports.TicketPriority = TicketPriority = {}));
 let Ticket = class Ticket extends sequelize_typescript_1.Model {
-    id;
     title;
     description;
     status;
@@ -41,8 +40,6 @@ let Ticket = class Ticket extends sequelize_typescript_1.Model {
     support;
     department;
     messages;
-    createdAt;
-    updatedAt;
 };
 exports.Ticket = Ticket;
 __decorate([

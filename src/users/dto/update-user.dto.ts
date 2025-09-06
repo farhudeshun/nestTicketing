@@ -15,5 +15,5 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsEnum(UserRoleEnum)
-  readonly role?: string;
+  readonly role?: UserRoleEnum;
 }

@@ -20,7 +20,7 @@ export class Role extends Model<Role> {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
-  id: string;
+  declare id: string;
 
   @AllowNull(false)
   @Column(DataType.STRING(50))
@@ -29,4 +29,3 @@ export class Role extends Model<Role> {
   @BelongsToMany(() => User, () => UserRole)
   users: User[];
 }
-
