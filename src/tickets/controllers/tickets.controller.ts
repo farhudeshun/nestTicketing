@@ -18,6 +18,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiBody,
 } from '@nestjs/swagger';
 import { UserGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
@@ -34,11 +35,39 @@ export class TicketsController {
   @Post()
   @Roles(UserRoleEnum.USER)
   @ApiOperation({ summary: 'Create a new ticket (User only)' })
+  @ApiBody({
+    type: CreateTicketDto,
+    examples: {
+      example1: {
+        summary: 'Sample ticket creation',
+        value: {
+          title: 'Unable to login to my account',
+          description:
+            'I am unable to login to my account. I keep getting an error message.',
+          priority: 'medium',
+          departmentId: '123e4567-e89b-12d3-a456-426614174000',
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'The ticket has been successfully created.',
+    schema: {
+      example: {
+        id: 1,
+        title: 'Unable to login to my account',
+        description:
+          'I am unable to login to my account. I keep getting an error message.',
+        priority: 'medium',
+        status: 'open',
+        departmentId: '123e4567-e89b-12d3-a456-426614174000',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
   })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
   create(@Body() createTicketDto: CreateTicketDto, @Req() req) {
     return this.ticketsService.create(createTicketDto, req.user.userId);
   }
@@ -46,7 +75,26 @@ export class TicketsController {
   @Get()
   @Roles(UserRoleEnum.SUPERADMIN, UserRoleEnum.SUPPORT, UserRoleEnum.USER)
   @ApiOperation({ summary: 'Retrieve all tickets' })
-  @ApiResponse({ status: 200, description: 'Returns all tickets.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all tickets.',
+    schema: {
+      example: [
+        {
+          id: 1,
+          title: 'Unable to login to my account',
+          description:
+            'I am unable to login to my account. I keep getting an error message.',
+          priority: 'medium',
+          status: 'open',
+          departmentId: '123e4567-e89b-12d3-a456-426614174000',
+          userId: '123e4567-e89b-12d3-a456-426614174000',
+          createdAt: '2025-09-06T10:00:00.000Z',
+          updatedAt: '2025-09-06T10:00:00.000Z',
+        },
+      ],
+    },
+  })
   findAll() {
     return this.ticketsService.findAll();
   }
@@ -54,7 +102,24 @@ export class TicketsController {
   @Get(':id')
   @Roles(UserRoleEnum.SUPERADMIN, UserRoleEnum.SUPPORT, UserRoleEnum.USER)
   @ApiOperation({ summary: 'Retrieve a ticket by ID' })
-  @ApiResponse({ status: 200, description: 'Returns the ticket.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the ticket.',
+    schema: {
+      example: {
+        id: 1,
+        title: 'Unable to login to my account',
+        description:
+          'I am unable to login to my account. I keep getting an error message.',
+        priority: 'medium',
+        status: 'open',
+        departmentId: '123e4567-e89b-12d3-a456-426614174000',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Ticket not found.' })
   findOne(@Param('id') id: string) {
     return this.ticketsService.findOne(+id);
@@ -64,6 +129,21 @@ export class TicketsController {
   @Roles(UserRoleEnum.SUPERADMIN, UserRoleEnum.SUPPORT)
   @ApiOperation({
     summary: 'Update a ticket by ID (Superadmin and Support only)',
+  })
+  @ApiBody({
+    type: UpdateTicketDto,
+    examples: {
+      example1: {
+        summary: 'Update ticket info',
+        value: {
+          title: 'Login issue resolved',
+          description: 'The user can now login successfully.',
+          priority: 'high',
+          status: 'in-progress',
+          supportId: '123e4567-e89b-12d3-a456-426614174000',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 200,
@@ -92,6 +172,17 @@ export class TicketsController {
   @Roles(UserRoleEnum.SUPERADMIN, UserRoleEnum.SUPPORT)
   @ApiOperation({
     summary: 'Assign a ticket to a support user (Superadmin and Support only)',
+  })
+  @ApiBody({
+    type: AssignToSupportDto,
+    examples: {
+      example1: {
+        summary: 'Assign ticket to support',
+        value: {
+          supportId: '123e4567-e89b-12d3-a456-426614174000',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 200,

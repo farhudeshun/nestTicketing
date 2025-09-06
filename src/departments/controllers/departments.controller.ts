@@ -16,6 +16,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiBody,
 } from '@nestjs/swagger';
 import { UserGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
@@ -32,9 +33,28 @@ export class DepartmentsController {
   @Post()
   @Roles(UserRoleEnum.SUPERADMIN)
   @ApiOperation({ summary: 'Create a new department (Superadmin only)' })
+  @ApiBody({
+    type: CreateDepartmentDto,
+    examples: {
+      example1: {
+        summary: 'Sample department creation',
+        value: {
+          name: 'Office',
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'The department has been successfully created.',
+    schema: {
+      example: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Office',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   create(@Body() createDepartmentDto: CreateDepartmentDto) {
@@ -43,14 +63,44 @@ export class DepartmentsController {
 
   @Get()
   @ApiOperation({ summary: 'Retrieve all departments' })
-  @ApiResponse({ status: 200, description: 'Returns all departments.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all departments.',
+    schema: {
+      example: [
+        {
+          id: '123e4567-e89b-12d3-a456-426614174000',
+          name: 'Office',
+          createdAt: '2025-09-06T10:00:00.000Z',
+          updatedAt: '2025-09-06T10:00:00.000Z',
+        },
+        {
+          id: '223e4567-e89b-12d3-a456-426614174001',
+          name: 'HR',
+          createdAt: '2025-09-06T10:05:00.000Z',
+          updatedAt: '2025-09-06T10:05:00.000Z',
+        },
+      ],
+    },
+  })
   findAll() {
     return this.departmentsService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Retrieve a department by ID' })
-  @ApiResponse({ status: 200, description: 'Returns the department.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the department.',
+    schema: {
+      example: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Office',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Department not found.' })
   findOne(@Param('id') id: string) {
     return this.departmentsService.findById(id);
@@ -59,9 +109,28 @@ export class DepartmentsController {
   @Patch(':id')
   @Roles(UserRoleEnum.SUPERADMIN)
   @ApiOperation({ summary: 'Update a department by ID (Superadmin only)' })
+  @ApiBody({
+    type: UpdateDepartmentDto,
+    examples: {
+      example1: {
+        summary: 'Update department name',
+        value: {
+          name: 'New Office Name',
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'The department has been successfully updated.',
+    schema: {
+      example: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'New Office Name',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T11:00:00.000Z',
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Department not found.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -78,6 +147,14 @@ export class DepartmentsController {
   @ApiResponse({
     status: 200,
     description: 'The department has been successfully deleted.',
+    schema: {
+      example: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Office',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Department not found.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })

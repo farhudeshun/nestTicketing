@@ -21,7 +21,7 @@ export declare class SecurityLogResponseDto {
     isValid: boolean;
     index: number;
 }
-declare const SearchSecurityLogDto_base: import("@nestjs/common").Type<Omit<SearchAuditDto, "userId" | "id" | "name">>;
+declare const SearchSecurityLogDto_base: import("@nestjs/common").Type<Omit<SearchAuditDto, "id" | "userId" | "name">>;
 export declare class SearchSecurityLogDto extends SearchSecurityLogDto_base {
     title?: string;
     username?: string;

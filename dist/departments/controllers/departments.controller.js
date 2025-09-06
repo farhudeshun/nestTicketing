@@ -48,9 +48,28 @@ __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new department (Superadmin only)' }),
+    (0, swagger_1.ApiBody)({
+        type: create_department_dto_1.CreateDepartmentDto,
+        examples: {
+            example1: {
+                summary: 'Sample department creation',
+                value: {
+                    name: 'Office',
+                },
+            },
+        },
+    }),
     (0, swagger_1.ApiResponse)({
         status: 201,
         description: 'The department has been successfully created.',
+        schema: {
+            example: {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                name: 'Office',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T10:00:00.000Z',
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Body)()),
@@ -61,7 +80,26 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve all departments' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Returns all departments.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Returns all departments.',
+        schema: {
+            example: [
+                {
+                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    name: 'Office',
+                    createdAt: '2025-09-06T10:00:00.000Z',
+                    updatedAt: '2025-09-06T10:00:00.000Z',
+                },
+                {
+                    id: '223e4567-e89b-12d3-a456-426614174001',
+                    name: 'HR',
+                    createdAt: '2025-09-06T10:05:00.000Z',
+                    updatedAt: '2025-09-06T10:05:00.000Z',
+                },
+            ],
+        },
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
@@ -69,7 +107,18 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve a department by ID' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Returns the department.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Returns the department.',
+        schema: {
+            example: {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                name: 'Office',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T10:00:00.000Z',
+            },
+        },
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -80,9 +129,28 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Update a department by ID (Superadmin only)' }),
+    (0, swagger_1.ApiBody)({
+        type: update_department_dto_1.UpdateDepartmentDto,
+        examples: {
+            example1: {
+                summary: 'Update department name',
+                value: {
+                    name: 'New Office Name',
+                },
+            },
+        },
+    }),
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'The department has been successfully updated.',
+        schema: {
+            example: {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                name: 'New Office Name',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T11:00:00.000Z',
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
@@ -99,6 +167,14 @@ __decorate([
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'The department has been successfully deleted.',
+        schema: {
+            example: {
+                id: '123e4567-e89b-12d3-a456-426614174000',
+                name: 'Office',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T10:00:00.000Z',
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),

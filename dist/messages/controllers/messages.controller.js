@@ -44,9 +44,33 @@ __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.USER, user_entity_1.UserRoleEnum.SUPPORT, user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new message' }),
+    (0, swagger_1.ApiBody)({
+        type: create_message_dto_1.CreateMessageDto,
+        examples: {
+            example1: {
+                summary: 'Create message example',
+                value: {
+                    ticketId: 1,
+                    content: 'Hello, this is a test message',
+                    attachmentUrl: 'http://localhost:9000/messages/image.png',
+                },
+            },
+        },
+    }),
     (0, swagger_1.ApiResponse)({
         status: 201,
         description: 'The message has been successfully created.',
+        schema: {
+            example: {
+                id: 1,
+                ticketId: 1,
+                content: 'Hello, this is a test message',
+                attachmentUrl: 'http://localhost:9000/messages/image.png',
+                userId: '123e4567-e89b-12d3-a456-426614174000',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T10:00:00.000Z',
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
     __param(0, (0, common_1.Body)()),
@@ -62,6 +86,28 @@ __decorate([
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Returns all messages for the specified ticket.',
+        schema: {
+            example: [
+                {
+                    id: 1,
+                    ticketId: 1,
+                    content: 'Hello, this is a test message',
+                    attachmentUrl: 'http://localhost:9000/messages/image.png',
+                    userId: '123e4567-e89b-12d3-a456-426614174000',
+                    createdAt: '2025-09-06T10:00:00.000Z',
+                    updatedAt: '2025-09-06T10:00:00.000Z',
+                },
+                {
+                    id: 2,
+                    ticketId: 1,
+                    content: 'Follow-up message',
+                    attachmentUrl: null,
+                    userId: '223e4567-e89b-12d3-a456-426614174001',
+                    createdAt: '2025-09-06T11:00:00.000Z',
+                    updatedAt: '2025-09-06T11:00:00.000Z',
+                },
+            ],
+        },
     }),
     __param(0, (0, common_1.Param)('ticketId')),
     __metadata("design:type", Function),
@@ -72,7 +118,21 @@ __decorate([
     (0, common_1.Get)(':id'),
     (0, roles_decorator_1.Roles)(user_entity_1.UserRoleEnum.USER, user_entity_1.UserRoleEnum.SUPPORT, user_entity_1.UserRoleEnum.SUPERADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve a message by ID' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Returns the message.' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Returns the message.',
+        schema: {
+            example: {
+                id: 1,
+                ticketId: 1,
+                content: 'Hello, this is a test message',
+                attachmentUrl: 'http://localhost:9000/messages/image.png',
+                userId: '123e4567-e89b-12d3-a456-426614174000',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T10:00:00.000Z',
+            },
+        },
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Message not found.' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -86,6 +146,17 @@ __decorate([
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'The message has been successfully deleted.',
+        schema: {
+            example: {
+                id: 1,
+                ticketId: 1,
+                content: 'Hello, this is a test message',
+                attachmentUrl: 'http://localhost:9000/messages/image.png',
+                userId: '123e4567-e89b-12d3-a456-426614174000',
+                createdAt: '2025-09-06T10:00:00.000Z',
+                updatedAt: '2025-09-06T10:00:00.000Z',
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Message not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),

@@ -15,6 +15,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiBody,
 } from '@nestjs/swagger';
 import { UserGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
@@ -31,9 +32,33 @@ export class MessagesController {
   @Post()
   @Roles(UserRoleEnum.USER, UserRoleEnum.SUPPORT, UserRoleEnum.SUPERADMIN)
   @ApiOperation({ summary: 'Create a new message' })
+  @ApiBody({
+    type: CreateMessageDto,
+    examples: {
+      example1: {
+        summary: 'Create message example',
+        value: {
+          ticketId: 1,
+          content: 'Hello, this is a test message',
+          attachmentUrl: 'http://localhost:9000/messages/image.png',
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'The message has been successfully created.',
+    schema: {
+      example: {
+        id: 1,
+        ticketId: 1,
+        content: 'Hello, this is a test message',
+        attachmentUrl: 'http://localhost:9000/messages/image.png',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   create(@Body() createMessageDto: CreateMessageDto, @Req() req) {
@@ -46,6 +71,28 @@ export class MessagesController {
   @ApiResponse({
     status: 200,
     description: 'Returns all messages for the specified ticket.',
+    schema: {
+      example: [
+        {
+          id: 1,
+          ticketId: 1,
+          content: 'Hello, this is a test message',
+          attachmentUrl: 'http://localhost:9000/messages/image.png',
+          userId: '123e4567-e89b-12d3-a456-426614174000',
+          createdAt: '2025-09-06T10:00:00.000Z',
+          updatedAt: '2025-09-06T10:00:00.000Z',
+        },
+        {
+          id: 2,
+          ticketId: 1,
+          content: 'Follow-up message',
+          attachmentUrl: null,
+          userId: '223e4567-e89b-12d3-a456-426614174001',
+          createdAt: '2025-09-06T11:00:00.000Z',
+          updatedAt: '2025-09-06T11:00:00.000Z',
+        },
+      ],
+    },
   })
   findAllByTicket(@Param('ticketId') ticketId: string) {
     return this.messagesService.findAllByTicket(+ticketId);
@@ -54,7 +101,21 @@ export class MessagesController {
   @Get(':id')
   @Roles(UserRoleEnum.USER, UserRoleEnum.SUPPORT, UserRoleEnum.SUPERADMIN)
   @ApiOperation({ summary: 'Retrieve a message by ID' })
-  @ApiResponse({ status: 200, description: 'Returns the message.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the message.',
+    schema: {
+      example: {
+        id: 1,
+        ticketId: 1,
+        content: 'Hello, this is a test message',
+        attachmentUrl: 'http://localhost:9000/messages/image.png',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
+  })
   @ApiResponse({ status: 404, description: 'Message not found.' })
   findOne(@Param('id') id: string) {
     return this.messagesService.findOne(+id);
@@ -66,6 +127,17 @@ export class MessagesController {
   @ApiResponse({
     status: 200,
     description: 'The message has been successfully deleted.',
+    schema: {
+      example: {
+        id: 1,
+        ticketId: 1,
+        content: 'Hello, this is a test message',
+        attachmentUrl: 'http://localhost:9000/messages/image.png',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        createdAt: '2025-09-06T10:00:00.000Z',
+        updatedAt: '2025-09-06T10:00:00.000Z',
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Message not found.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
