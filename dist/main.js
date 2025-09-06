@@ -4,8 +4,12 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
 const swagger_config_1 = require("./config/swagger.config");
+const sequelize_typescript_1 = require("sequelize-typescript");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const sequelize = app.get(sequelize_typescript_1.Sequelize);
+    await sequelize.sync({ force: true });
+    console.log('✅ Database synced');
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,

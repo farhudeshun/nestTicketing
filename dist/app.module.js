@@ -23,6 +23,12 @@ const messages_module_1 = require("./messages/messages.module");
 const jwt_auth_guard_1 = require("./auth/guards/jwt-auth.guard");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const user_entity_1 = require("./users/entities/user.entity");
+const role_entity_1 = require("./users/entities/role.entity");
+const user_role_entity_1 = require("./users/entities/user-role.entity");
+const ticket_entity_1 = require("./tickets/entities/ticket.entity");
+const department_entity_1 = require("./departments/entities/department.entity");
+const message_entity_1 = require("./messages/entities/message.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -42,7 +48,12 @@ exports.AppModule = AppModule = __decorate([
                     if (!dbConfig) {
                         throw new Error('Database configuration not found');
                     }
-                    return dbConfig;
+                    return {
+                        ...dbConfig,
+                        models: [user_entity_1.User, role_entity_1.Role, user_role_entity_1.UserRole, ticket_entity_1.Ticket, department_entity_1.Department, message_entity_1.Message],
+                        autoLoadModels: true,
+                        synchronize: true,
+                    };
                 },
             }),
             auth_module_1.AuthModule,

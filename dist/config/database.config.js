@@ -13,7 +13,7 @@ exports.default = (0, config_1.registerAs)('database', () => ({
     port: parseInt(process.env.DB_PORT ?? '5432', 10),
     username: process.env.DB_USERNAME || 'sabi',
     password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'mydb',
+    database: process.env.DB_NAME || 'nest',
     models: [user_entity_1.User, role_entity_1.Role, user_role_entity_1.UserRole, department_entity_1.Department, ticket_entity_1.Ticket, message_entity_1.Message],
     autoLoadModels: true,
     synchronize: process.env.NODE_ENV !== 'production',

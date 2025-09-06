@@ -1,3 +1,4 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -11,6 +12,13 @@ import { MessagesModule } from './messages/messages.module';
 import { UserGuard } from './auth/guards/jwt-auth.guard';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+import { User } from './users/entities/user.entity';
+import { Role } from './users/entities/role.entity';
+import { UserRole } from './users/entities/user-role.entity';
+import { Ticket } from './tickets/entities/ticket.entity';
+import { Department } from './departments/entities/department.entity';
+import { Message } from './messages/entities/message.entity';
 
 @Module({
   imports: [
@@ -27,7 +35,12 @@ import { AppService } from './app.service';
         if (!dbConfig) {
           throw new Error('Database configuration not found');
         }
-        return dbConfig;
+        return {
+          ...dbConfig,
+          models: [User, Role, UserRole, Ticket, Department, Message],
+          autoLoadModels: true,
+          synchronize: true,
+        };
       },
     }),
     AuthModule,
