@@ -1,24 +1,16 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  Default,
-  Unique,
-  AllowNull,
-  BelongsTo,
-  ForeignKey,
-  HasMany,
-  BelongsToMany,
-  CreatedAt,
-  UpdatedAt,
-} from 'sequelize-typescript';
 import { Department } from '../../departments/entities/department.entity';
 import { Ticket } from '../../tickets/entities/ticket.entity';
-import { Message } from '../../messages/entities/message.entity';
 import { Role } from './role.entity';
-import { UserRole } from './user-role.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { userState } from '@ngn-net/giftcard-shared';
 
 export enum UserRoleEnum {
   SUPERADMIN = 'superadmin',
@@ -27,57 +19,38 @@ export enum UserRoleEnum {
   EWANO = 'ewano',
 }
 
-@Table({
-  tableName: 'users',
-  underscored: true,
-  timestamps: true,
-})
-export class User extends Model<User> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.UUID)
-  declare id: string;
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Unique
-  @AllowNull(false)
-  @Column(DataType.STRING(100))
-  email: string;
+  @Column({ unique: true, nullable: true })
+  email?: string;
+  @Column({ unique: true, nullable: true })
+  phone?: string;
+  @Column({ enum: userState })
+  state: userState;
 
-  @AllowNull(false)
-  @Column(DataType.STRING(100))
-  name: string;
+  @Column()
+  userid: string;
 
-  @AllowNull(false)
-  @Column(DataType.TEXT)
-  password: string;
-
-  @AllowNull(false)
-  @Default(UserRoleEnum.USER)
-  @Column(DataType.ENUM(...Object.values(UserRoleEnum)))
-  role: UserRoleEnum;
-
-  @ForeignKey(() => Department)
-  @Column(DataType.UUID)
-  departmentId: string;
-
-  @BelongsTo(() => Department)
-  department: Department;
-
-  @HasMany(() => Ticket, 'userId')
-  createdTickets: Ticket[];
-
-  @HasMany(() => Ticket, 'supportId')
-  assignedTickets: Ticket[];
-
-  @HasMany(() => Message)
-  messages: Message[];
-
-  @BelongsToMany(() => Role, () => UserRole)
+  @Column()
+  fullName: string;
+  @ManyToMany(() => Role, (role) => role.users)
   roles: Role[];
 
-  @CreatedAt
-  declare createdAt: Date;
+  @ManyToMany(() => Department, (dep) => dep.users)
+  department: Department;
 
-  @UpdatedAt
-  declare updatedAt: Date;
+  @OneToMany(() => Ticket, (tic) => tic.createBy)
+  createdTickets: Ticket[];
+
+  @OneToMany(() => Ticket, (tic) => tic.assignTo)
+  assignedTickets: Ticket[];
+
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

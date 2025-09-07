@@ -1,21 +1,15 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  AutoIncrement,
-  AllowNull,
-  Default,
-  BelongsTo,
-  ForeignKey,
-  HasMany,
-  CreatedAt,
-  UpdatedAt,
-} from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
 import { Department } from '../../departments/entities/department.entity';
 import { Message } from '../../messages/entities/message.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export enum TicketStatus {
   OPEN = 'open',
@@ -30,66 +24,40 @@ export enum TicketPriority {
   HIGH = 'high',
 }
 
-@Table({
-  tableName: 'tickets',
-  underscored: true,
-  timestamps: true,
-})
-export class Ticket extends Model<Ticket> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.BIGINT)
-  declare id: number;
+@Entity()
+export class Ticket {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @AllowNull(false)
-  @Column(DataType.STRING(255))
+  @Column({ nullable: false, length: 128 })
   title: string;
-
-  @AllowNull(false)
-  @Column(DataType.TEXT)
+  @Column({ nullable: false, type: 'text' })
   description: string;
 
-  @AllowNull(false)
-  @Default(TicketStatus.OPEN)
-  @Column(DataType.ENUM(...Object.values(TicketStatus)))
+  @Column({ nullable: false, enum: TicketStatus, default: TicketStatus.OPEN })
   status: TicketStatus;
 
-  @AllowNull(false)
-  @Default(TicketPriority.LOW)
-  @Column(DataType.ENUM(...Object.values(TicketPriority)))
+  @Column({
+    nullable: false,
+    enum: TicketPriority,
+    default: TicketPriority.LOW,
+  })
   priority: TicketPriority;
 
-  @Column(DataType.DATE)
+  @Column({ type: 'timestamp with time zone' })
   assignedDate: Date;
 
-  @ForeignKey(() => User)
-  @AllowNull(false)
-  @Column(DataType.UUID)
-  userId: string;
+  @ManyToOne(() => User, (user) => user.createdTickets)
+  createBy: User;
+  @ManyToOne(() => User, (user) => user.assignedTickets)
+  assignTo: User;
 
-  @ForeignKey(() => User)
-  @Column(DataType.UUID)
-  supportId: string;
-
-  @ForeignKey(() => Department)
-  @Column(DataType.UUID)
-  departmentId: string;
-
-  @BelongsTo(() => User, 'userId')
-  creator: User;
-
-  @BelongsTo(() => User, 'supportId')
-  support: User;
-
-  @BelongsTo(() => Department)
-  department: Department;
-
-  @HasMany(() => Message)
+  @OneToMany(() => Message, (message) => message.ticket)
   messages: Message[];
 
-  @CreatedAt
-  declare createdAt: Date;
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
 
-  @UpdatedAt
-  declare updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }

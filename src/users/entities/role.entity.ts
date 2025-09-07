@@ -1,31 +1,21 @@
 import {
-  Table,
   Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  Default,
-  AllowNull,
-  BelongsToMany,
-} from 'sequelize-typescript';
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
-import { UserRole } from './user-role.entity';
 
-@Table({
-  tableName: 'roles',
-  underscored: true,
-  timestamps: false,
-})
-export class Role extends Model<Role> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.UUID)
-  declare id: string;
+@Entity()
+export class Role {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @AllowNull(false)
-  @Column(DataType.STRING(50))
+  @Column({ nullable: false, unique: true, length: 64 })
   name: string;
 
-  @BelongsToMany(() => User, () => UserRole)
+  @ManyToMany(() => User, (user) => user.roles)
+  @JoinTable()
   users: User[];
 }

@@ -1,53 +1,34 @@
 import {
-  Table,
   Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  AutoIncrement,
-  AllowNull,
-  BelongsTo,
-  ForeignKey,
-  CreatedAt,
-  UpdatedAt,
-} from 'sequelize-typescript';
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Ticket } from '../../tickets/entities/ticket.entity';
 import { User } from '../../users/entities/user.entity';
 
-@Table({
-  tableName: 'messages',
-  underscored: true,
-  timestamps: true,
-})
-export class Message extends Model<Message> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.BIGINT)
-  declare id: number;
+@Entity()
+export class Message {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @AllowNull(false)
-  @Column(DataType.TEXT)
+  @Column({ nullable: false, type: 'text' })
   content: string;
-
-  @ForeignKey(() => Ticket)
-  @AllowNull(false)
-  @Column(DataType.BIGINT)
+  @Column()
   ticketId: number;
-
-  @ForeignKey(() => User)
-  @AllowNull(false)
-  @Column(DataType.UUID)
-  userId: string;
-
-  @BelongsTo(() => Ticket)
+  @ManyToOne(() => Ticket, (tic) => tic.messages)
   ticket: Ticket;
 
-  @BelongsTo(() => User)
+  userId: number;
+  @ManyToOne(() => User)
   user: User;
+  @Column({ type: 'timestamp with time zone' })
+  seenDate: Date;
+  @CreateDateColumn({ type: 'timestamp with time zone' })
+  createdAt: Date;
 
-  @CreatedAt
-  declare createdAt: Date;
-
-  @UpdatedAt
-  declare updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp with time zone' })
+  updatedAt: Date;
 }
