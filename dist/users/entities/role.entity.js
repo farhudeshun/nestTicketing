@@ -10,34 +10,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Role = void 0;
-const sequelize_typescript_1 = require("sequelize-typescript");
+const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
-const user_role_entity_1 = require("./user-role.entity");
-let Role = class Role extends sequelize_typescript_1.Model {
+let Role = class Role {
+    id;
     name;
     users;
 };
 exports.Role = Role;
 __decorate([
-    sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Default)(sequelize_typescript_1.DataType.UUIDV4),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID),
-    __metadata("design:type", String)
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
 ], Role.prototype, "id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING(50)),
+    (0, typeorm_1.Column)({ nullable: false, unique: true, length: 64 }),
     __metadata("design:type", String)
 ], Role.prototype, "name", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsToMany)(() => user_entity_1.User, () => user_role_entity_1.UserRole),
+    (0, typeorm_1.ManyToMany)(() => user_entity_1.User, (user) => user.roles),
+    (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Role.prototype, "users", void 0);
 exports.Role = Role = __decorate([
-    (0, sequelize_typescript_1.Table)({
-        tableName: 'roles',
-        underscored: true,
-        timestamps: false,
-    })
+    (0, typeorm_1.Entity)()
 ], Role);
 //# sourceMappingURL=role.entity.js.map

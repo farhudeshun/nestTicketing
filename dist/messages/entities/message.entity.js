@@ -10,61 +10,54 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
-const sequelize_typescript_1 = require("sequelize-typescript");
+const typeorm_1 = require("typeorm");
 const ticket_entity_1 = require("../../tickets/entities/ticket.entity");
 const user_entity_1 = require("../../users/entities/user.entity");
-let Message = class Message extends sequelize_typescript_1.Model {
+let Message = class Message {
+    id;
     content;
     ticketId;
-    userId;
     ticket;
+    userId;
     user;
+    seenDate;
+    createdAt;
+    updatedAt;
 };
 exports.Message = Message;
 __decorate([
-    sequelize_typescript_1.PrimaryKey,
-    sequelize_typescript_1.AutoIncrement,
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.BIGINT),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Message.prototype, "id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.TEXT),
+    (0, typeorm_1.Column)({ nullable: false, type: 'text' }),
     __metadata("design:type", String)
 ], Message.prototype, "content", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => ticket_entity_1.Ticket),
-    (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.BIGINT),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Message.prototype, "ticketId", void 0);
 __decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => user_entity_1.User),
-    (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID),
-    __metadata("design:type", String)
-], Message.prototype, "userId", void 0);
-__decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => ticket_entity_1.Ticket),
+    (0, typeorm_1.ManyToOne)(() => ticket_entity_1.Ticket, (tic) => tic.messages),
     __metadata("design:type", ticket_entity_1.Ticket)
 ], Message.prototype, "ticket", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => user_entity_1.User),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User),
     __metadata("design:type", user_entity_1.User)
 ], Message.prototype, "user", void 0);
 __decorate([
-    sequelize_typescript_1.CreatedAt,
+    (0, typeorm_1.Column)({ type: 'timestamp with time zone' }),
+    __metadata("design:type", Date)
+], Message.prototype, "seenDate", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)({ type: 'timestamp with time zone' }),
     __metadata("design:type", Date)
 ], Message.prototype, "createdAt", void 0);
 __decorate([
-    sequelize_typescript_1.UpdatedAt,
+    (0, typeorm_1.UpdateDateColumn)({ type: 'timestamp with time zone' }),
     __metadata("design:type", Date)
 ], Message.prototype, "updatedAt", void 0);
 exports.Message = Message = __decorate([
-    (0, sequelize_typescript_1.Table)({
-        tableName: 'messages',
-        underscored: true,
-        timestamps: true,
-    })
+    (0, typeorm_1.Entity)()
 ], Message);
 //# sourceMappingURL=message.entity.js.map

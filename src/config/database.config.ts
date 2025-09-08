@@ -1,24 +1,23 @@
 import { registerAs } from '@nestjs/config';
-import { SequelizeModuleOptions } from '@nestjs/sequelize';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { Role } from '../users/entities/role.entity';
-import { UserRole } from '../users/entities/user-role.entity';
 import { Department } from '../departments/entities/department.entity';
 import { Ticket } from '../tickets/entities/ticket.entity';
 import { Message } from '../messages/entities/message.entity';
 
 export default registerAs(
   'database',
-  (): SequelizeModuleOptions => ({
-    dialect: 'postgres',
+  (): TypeOrmModuleOptions => ({
+    type: 'postgres',
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT ?? '5432', 10),
     username: process.env.DB_USERNAME || 'sabi',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'nest',
-    models: [User, Role, UserRole, Department, Ticket, Message],
-    autoLoadModels: true,
+    entities: [User, Role, Department, Ticket, Message],
+    autoLoadEntities: true,
     synchronize: process.env.NODE_ENV !== 'production',
-    logging: process.env.NODE_ENV === 'development' ? console.log : false,
+    logging: process.env.NODE_ENV === 'development',
   }),
 );

@@ -8,7 +8,7 @@ export declare class TicketsController {
     create(createTicketDto: CreateTicketDto, req: any): Promise<import("../entities/ticket.entity").Ticket>;
     findAll(): Promise<import("../entities/ticket.entity").Ticket[]>;
     findOne(id: string): Promise<import("../entities/ticket.entity").Ticket>;
-    update(id: string, updateTicketDto: UpdateTicketDto): Promise<[number, import("../entities/ticket.entity").Ticket[]]>;
+    update(id: string, updateTicketDto: UpdateTicketDto): Promise<import("../entities/ticket.entity").Ticket>;
     remove(id: string): Promise<void>;
-    assignToSupport(ticketId: string, assignToSupportDto: AssignToSupportDto): Promise<[number, import("../entities/ticket.entity").Ticket[]]>;
+    assignToSupport(ticketId: string, assignToSupportDto: AssignToSupportDto): Promise<import("../entities/ticket.entity").Ticket>;
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -52,11 +53,10 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'List of all users',
-    // example array of users
     schema: {
       example: [
         {
-          id: 'uuid-1',
+          id: 1,
           name: 'Sabi',
           email: 'sabi@example.com',
           role: 'ADMIN',
@@ -78,7 +78,7 @@ export class UserController {
     description: 'User found',
     schema: {
       example: {
-        id: 'uuid-1',
+        id: 1,
         name: 'Sabi',
         email: 'sabi@example.com',
         role: 'ADMIN',
@@ -88,7 +88,7 @@ export class UserController {
     },
   })
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findById(id);
   }
 
@@ -110,7 +110,10 @@ export class UserController {
   })
   @ApiResponse({ status: 200, description: 'User updated successfully' })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.updateUser(id, updateUserDto);
   }
 
@@ -118,7 +121,7 @@ export class UserController {
   @ApiOperation({ summary: 'Delete user' })
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     return this.userService.remove(id);
   }
 }

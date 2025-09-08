@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TicketsModule = void 0;
 const common_1 = require("@nestjs/common");
-const sequelize_1 = require("@nestjs/sequelize");
+const typeorm_1 = require("@nestjs/typeorm");
 const ticket_entity_1 = require("./entities/ticket.entity");
 const tickets_service_1 = require("./services/tickets.service");
 const tickets_controller_1 = require("./controllers/tickets.controller");
@@ -19,11 +19,7 @@ let TicketsModule = class TicketsModule {
 exports.TicketsModule = TicketsModule;
 exports.TicketsModule = TicketsModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            sequelize_1.SequelizeModule.forFeature([ticket_entity_1.Ticket]),
-            users_module_1.UsersModule,
-            departments_module_1.DepartmentsModule,
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([ticket_entity_1.Ticket]), users_module_1.UsersModule, departments_module_1.DepartmentsModule],
         controllers: [tickets_controller_1.TicketsController],
         providers: [tickets_service_1.TicketsService],
         exports: [tickets_service_1.TicketsService],

@@ -53,9 +53,7 @@ __decorate([
         examples: {
             example1: {
                 summary: 'Sample department creation',
-                value: {
-                    name: 'Office',
-                },
+                value: { name: 'Office' },
             },
         },
     }),
@@ -64,7 +62,7 @@ __decorate([
         description: 'The department has been successfully created.',
         schema: {
             example: {
-                id: '123e4567-e89b-12d3-a456-426614174000',
+                id: 1,
                 name: 'Office',
                 createdAt: '2025-09-06T10:00:00.000Z',
                 updatedAt: '2025-09-06T10:00:00.000Z',
@@ -86,13 +84,13 @@ __decorate([
         schema: {
             example: [
                 {
-                    id: '123e4567-e89b-12d3-a456-426614174000',
+                    id: 1,
                     name: 'Office',
                     createdAt: '2025-09-06T10:00:00.000Z',
                     updatedAt: '2025-09-06T10:00:00.000Z',
                 },
                 {
-                    id: '223e4567-e89b-12d3-a456-426614174001',
+                    id: 2,
                     name: 'HR',
                     createdAt: '2025-09-06T10:05:00.000Z',
                     updatedAt: '2025-09-06T10:05:00.000Z',
@@ -112,7 +110,7 @@ __decorate([
         description: 'Returns the department.',
         schema: {
             example: {
-                id: '123e4567-e89b-12d3-a456-426614174000',
+                id: 1,
                 name: 'Office',
                 createdAt: '2025-09-06T10:00:00.000Z',
                 updatedAt: '2025-09-06T10:00:00.000Z',
@@ -120,9 +118,9 @@ __decorate([
         },
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], DepartmentsController.prototype, "findOne", null);
 __decorate([
@@ -134,9 +132,7 @@ __decorate([
         examples: {
             example1: {
                 summary: 'Update department name',
-                value: {
-                    name: 'New Office Name',
-                },
+                value: { name: 'New Office Name' },
             },
         },
     }),
@@ -145,7 +141,7 @@ __decorate([
         description: 'The department has been successfully updated.',
         schema: {
             example: {
-                id: '123e4567-e89b-12d3-a456-426614174000',
+                id: 1,
                 name: 'New Office Name',
                 createdAt: '2025-09-06T10:00:00.000Z',
                 updatedAt: '2025-09-06T11:00:00.000Z',
@@ -154,10 +150,10 @@ __decorate([
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_department_dto_1.UpdateDepartmentDto]),
+    __metadata("design:paramtypes", [Number, update_department_dto_1.UpdateDepartmentDto]),
     __metadata("design:returntype", void 0)
 ], DepartmentsController.prototype, "update", null);
 __decorate([
@@ -169,7 +165,7 @@ __decorate([
         description: 'The department has been successfully deleted.',
         schema: {
             example: {
-                id: '123e4567-e89b-12d3-a456-426614174000',
+                id: 1,
                 name: 'Office',
                 createdAt: '2025-09-06T10:00:00.000Z',
                 updatedAt: '2025-09-06T10:00:00.000Z',
@@ -178,9 +174,9 @@ __decorate([
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Department not found.' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Forbidden.' }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], DepartmentsController.prototype, "remove", null);
 exports.DepartmentsController = DepartmentsController = __decorate([

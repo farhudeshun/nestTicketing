@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Ticket } from '../entities/ticket.entity';
 import { CreateTicketDto } from '../dto/create-ticket.dto';
 import { UpdateTicketDto } from '../dto/update-ticket.dto';
@@ -9,22 +10,31 @@ import { Department } from '../../departments/entities/department.entity';
 @Injectable()
 export class TicketsService {
   constructor(
-    @InjectModel(Ticket) private ticketModel: typeof Ticket,
+    @InjectRepository(Ticket)
+    private readonly ticketRepo: Repository<Ticket>,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto, userId: string): Promise<Ticket> {
-    return this.ticketModel.create({ ...createTicketDto, userId } as any);
+  async create(
+    createTicketDto: CreateTicketDto,
+    userId: string,
+  ): Promise<Ticket> {
+    const ticket = this.ticketRepo.create({
+      ...createTicketDto,
+      createBy: { id: userId } as unknown as User,
+    });
+    return this.ticketRepo.save(ticket);
   }
 
   async findAll(): Promise<Ticket[]> {
-    return this.ticketModel.findAll({
-      include: [{ model: User, as: 'creator' }, { model: User, as: 'support' }, Department],
+    return this.ticketRepo.find({
+      relations: ['createBy', 'assignTo', 'department'],
     });
   }
 
   async findOne(id: number): Promise<Ticket> {
-    const ticket = await this.ticketModel.findByPk(id, {
-      include: [{ model: User, as: 'creator' }, { model: User, as: 'support' }, Department],
+    const ticket = await this.ticketRepo.findOne({
+      where: { id },
+      relations: ['createBy', 'assignTo', 'department'],
     });
     if (!ticket) {
       throw new NotFoundException(`Ticket with ID ${id} not found`);
@@ -32,31 +42,26 @@ export class TicketsService {
     return ticket;
   }
 
-  async update(id: number, updateTicketDto: UpdateTicketDto): Promise<[number, Ticket[]]> {
-    const [affectedCount, affectedRows] = await this.ticketModel.update(updateTicketDto, {
-      where: { id },
-      returning: true,
+  async update(id: number, updateTicketDto: UpdateTicketDto): Promise<Ticket> {
+    const ticket = await this.ticketRepo.preload({
+      id,
+      ...updateTicketDto,
     });
-    if (affectedCount === 0) {
+    if (!ticket) {
       throw new NotFoundException(`Ticket with ID ${id} not found`);
     }
-    return [affectedCount, affectedRows];
+    return this.ticketRepo.save(ticket);
   }
 
   async remove(id: number): Promise<void> {
     const ticket = await this.findOne(id);
-    await ticket.destroy();
+    await this.ticketRepo.remove(ticket);
   }
 
-  async assignToSupport(ticketId: number, supportId: string): Promise<[number, Ticket[]]> {
-    const [affectedCount, affectedRows] = await this.ticketModel.update(
-      { supportId, assignedDate: new Date() },
-      { where: { id: ticketId }, returning: true },
-    );
-    if (affectedCount === 0) {
-      throw new NotFoundException(`Ticket with ID ${ticketId} not found`);
-    }
-    return [affectedCount, affectedRows];
+  async assignToSupport(ticketId: number, supportId: string): Promise<Ticket> {
+    const ticket = await this.findOne(ticketId);
+    ticket.assignTo = { id: supportId } as unknown as User;
+    ticket.assignedDate = new Date();
+    return this.ticketRepo.save(ticket);
   }
 }
-

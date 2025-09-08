@@ -2,14 +2,18 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './config/swagger.config';
-import { Sequelize } from 'sequelize-typescript';
+import { DataSource } from 'typeorm';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const sequelize = app.get(Sequelize);
-  await sequelize.sync({ force: true });
-  console.log('✅ Database synced');
+  const dataSource = app.get(DataSource);
+  try {
+    await dataSource.initialize();
+    console.log('✅ Database connected with TypeORM (PostgreSQL)');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+  }
 
   app.useGlobalPipes(
     new ValidationPipe({

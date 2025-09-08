@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { DepartmentsService } from '../services/departments.service';
 import { CreateDepartmentDto } from '../dto/create-department.dto';
@@ -38,9 +39,7 @@ export class DepartmentsController {
     examples: {
       example1: {
         summary: 'Sample department creation',
-        value: {
-          name: 'Office',
-        },
+        value: { name: 'Office' },
       },
     },
   })
@@ -49,7 +48,7 @@ export class DepartmentsController {
     description: 'The department has been successfully created.',
     schema: {
       example: {
-        id: '123e4567-e89b-12d3-a456-426614174000',
+        id: 1,
         name: 'Office',
         createdAt: '2025-09-06T10:00:00.000Z',
         updatedAt: '2025-09-06T10:00:00.000Z',
@@ -69,13 +68,13 @@ export class DepartmentsController {
     schema: {
       example: [
         {
-          id: '123e4567-e89b-12d3-a456-426614174000',
+          id: 1,
           name: 'Office',
           createdAt: '2025-09-06T10:00:00.000Z',
           updatedAt: '2025-09-06T10:00:00.000Z',
         },
         {
-          id: '223e4567-e89b-12d3-a456-426614174001',
+          id: 2,
           name: 'HR',
           createdAt: '2025-09-06T10:05:00.000Z',
           updatedAt: '2025-09-06T10:05:00.000Z',
@@ -94,7 +93,7 @@ export class DepartmentsController {
     description: 'Returns the department.',
     schema: {
       example: {
-        id: '123e4567-e89b-12d3-a456-426614174000',
+        id: 1,
         name: 'Office',
         createdAt: '2025-09-06T10:00:00.000Z',
         updatedAt: '2025-09-06T10:00:00.000Z',
@@ -102,7 +101,7 @@ export class DepartmentsController {
     },
   })
   @ApiResponse({ status: 404, description: 'Department not found.' })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.findById(id);
   }
 
@@ -114,9 +113,7 @@ export class DepartmentsController {
     examples: {
       example1: {
         summary: 'Update department name',
-        value: {
-          name: 'New Office Name',
-        },
+        value: { name: 'New Office Name' },
       },
     },
   })
@@ -125,7 +122,7 @@ export class DepartmentsController {
     description: 'The department has been successfully updated.',
     schema: {
       example: {
-        id: '123e4567-e89b-12d3-a456-426614174000',
+        id: 1,
         name: 'New Office Name',
         createdAt: '2025-09-06T10:00:00.000Z',
         updatedAt: '2025-09-06T11:00:00.000Z',
@@ -135,7 +132,7 @@ export class DepartmentsController {
   @ApiResponse({ status: 404, description: 'Department not found.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
   ) {
     return this.departmentsService.update(id, updateDepartmentDto);
@@ -149,7 +146,7 @@ export class DepartmentsController {
     description: 'The department has been successfully deleted.',
     schema: {
       example: {
-        id: '123e4567-e89b-12d3-a456-426614174000',
+        id: 1,
         name: 'Office',
         createdAt: '2025-09-06T10:00:00.000Z',
         updatedAt: '2025-09-06T10:00:00.000Z',
@@ -158,7 +155,7 @@ export class DepartmentsController {
   })
   @ApiResponse({ status: 404, description: 'Department not found.' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.remove(id);
   }
 }

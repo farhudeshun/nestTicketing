@@ -1,4 +1,3 @@
-import { Model } from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
 import { Department } from '../../departments/entities/department.entity';
 import { Message } from '../../messages/entities/message.entity';
@@ -13,18 +12,15 @@ export declare enum TicketPriority {
     MEDIUM = "medium",
     HIGH = "high"
 }
-export declare class Ticket extends Model<Ticket> {
+export declare class Ticket {
     id: number;
     title: string;
     description: string;
     status: TicketStatus;
     priority: TicketPriority;
     assignedDate: Date;
-    userId: string;
-    supportId: string;
-    departmentId: string;
-    creator: User;
-    support: User;
+    createBy: User;
+    assignTo: User;
     department: Department;
     messages: Message[];
     createdAt: Date;

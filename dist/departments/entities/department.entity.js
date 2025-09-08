@@ -10,39 +10,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Department = void 0;
-const sequelize_typescript_1 = require("sequelize-typescript");
+const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../../users/entities/user.entity");
 const ticket_entity_1 = require("../../tickets/entities/ticket.entity");
-let Department = class Department extends sequelize_typescript_1.Model {
+let Department = class Department {
+    id;
     name;
     users;
     tickets;
 };
 exports.Department = Department;
 __decorate([
-    sequelize_typescript_1.PrimaryKey,
-    (0, sequelize_typescript_1.Default)(sequelize_typescript_1.DataType.UUIDV4),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.UUID),
-    __metadata("design:type", String)
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
 ], Department.prototype, "id", void 0);
 __decorate([
-    (0, sequelize_typescript_1.AllowNull)(false),
-    (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.STRING(100)),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 100, nullable: false }),
     __metadata("design:type", String)
 ], Department.prototype, "name", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => user_entity_1.User),
+    (0, typeorm_1.OneToMany)(() => user_entity_1.User, (user) => user.department),
     __metadata("design:type", Array)
 ], Department.prototype, "users", void 0);
 __decorate([
-    (0, sequelize_typescript_1.HasMany)(() => ticket_entity_1.Ticket),
+    (0, typeorm_1.OneToMany)(() => ticket_entity_1.Ticket, (ticket) => ticket.department),
     __metadata("design:type", Array)
 ], Department.prototype, "tickets", void 0);
 exports.Department = Department = __decorate([
-    (0, sequelize_typescript_1.Table)({
-        tableName: 'departments',
-        underscored: true,
-        timestamps: false,
-    })
+    (0, typeorm_1.Entity)('departments')
 ], Department);
 //# sourceMappingURL=department.entity.js.map

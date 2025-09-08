@@ -14,41 +14,44 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DepartmentsService = void 0;
 const common_1 = require("@nestjs/common");
-const sequelize_1 = require("@nestjs/sequelize");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
 const department_entity_1 = require("../entities/department.entity");
-const common_2 = require("@nestjs/common");
 let DepartmentsService = class DepartmentsService {
-    departmentModel;
-    constructor(departmentModel) {
-        this.departmentModel = departmentModel;
+    departmentRepo;
+    constructor(departmentRepo) {
+        this.departmentRepo = departmentRepo;
     }
     async create(createDepartmentDto) {
-        return this.departmentModel.create(createDepartmentDto);
+        const department = this.departmentRepo.create(createDepartmentDto);
+        return this.departmentRepo.save(department);
     }
     async findAll() {
-        return this.departmentModel.findAll();
+        return this.departmentRepo.find();
     }
     async findById(id) {
-        return this.departmentModel.findByPk(id);
+        return this.departmentRepo.findOne({ where: { id } });
     }
     async update(id, updateDepartmentDto) {
-        return this.departmentModel.update(updateDepartmentDto, {
-            where: { id },
-            returning: true,
-        });
+        const department = await this.findById(id);
+        if (!department) {
+            throw new common_1.NotFoundException(`Department with id ${id} not found`);
+        }
+        const updated = Object.assign(department, updateDepartmentDto);
+        return this.departmentRepo.save(updated);
     }
     async remove(id) {
         const department = await this.findById(id);
         if (!department) {
-            throw new common_2.NotFoundException(`Department with id ${id} not found`);
+            throw new common_1.NotFoundException(`Department with id ${id} not found`);
         }
-        await department.destroy();
+        await this.departmentRepo.remove(department);
     }
 };
 exports.DepartmentsService = DepartmentsService;
 exports.DepartmentsService = DepartmentsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, sequelize_1.InjectModel)(department_entity_1.Department)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, typeorm_1.InjectRepository)(department_entity_1.Department)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], DepartmentsService);
 //# sourceMappingURL=departments.service.js.map

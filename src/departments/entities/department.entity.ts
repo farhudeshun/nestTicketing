@@ -1,34 +1,18 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  PrimaryKey,
-  Default,
-  AllowNull,
-  HasMany,
-} from 'sequelize-typescript';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Ticket } from '../../tickets/entities/ticket.entity';
 
-@Table({
-  tableName: 'departments',
-  underscored: true,
-  timestamps: false,
-})
-export class Department extends Model<Department> {
-  @PrimaryKey
-  @Default(DataType.UUIDV4)
-  @Column(DataType.UUID)
-  declare id: string;
+@Entity('departments')
+export class Department {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @AllowNull(false)
-  @Column(DataType.STRING(100))
+  @Column({ type: 'varchar', length: 100, nullable: false })
   name: string;
 
-  @HasMany(() => User)
+  @OneToMany(() => User, (user) => user.department)
   users: User[];
 
-  @HasMany(() => Ticket)
+  @OneToMany(() => Ticket, (ticket) => ticket.department)
   tickets: Ticket[];
 }

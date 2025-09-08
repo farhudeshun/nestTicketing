@@ -14,44 +14,47 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
-const sequelize_1 = require("@nestjs/sequelize");
+const typeorm_1 = require("typeorm");
+const typeorm_2 = require("@nestjs/typeorm");
 const user_entity_1 = require("../entities/user.entity");
-const common_2 = require("@nestjs/common");
 let UsersService = class UsersService {
-    userModel;
-    constructor(userModel) {
-        this.userModel = userModel;
+    userRepo;
+    constructor(userRepo) {
+        this.userRepo = userRepo;
     }
     async create(createUserDto) {
-        return this.userModel.create(createUserDto);
+        const user = this.userRepo.create(createUserDto);
+        return this.userRepo.save(user);
     }
     async findAll() {
-        return this.userModel.findAll();
+        return this.userRepo.find();
     }
     async findById(id) {
-        return this.userModel.findByPk(id);
+        return this.userRepo.findOne({ where: { id } });
     }
     async findByEmail(email) {
-        return this.userModel.findOne({ where: { email } });
+        return this.userRepo.findOne({ where: { email } });
     }
     async updateUser(id, updateUserDto) {
-        return this.userModel.update(updateUserDto, {
-            where: { id },
-            returning: true,
-        });
+        const user = await this.findById(id);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with id ${id} not found`);
+        }
+        Object.assign(user, updateUserDto);
+        return this.userRepo.save(user);
     }
     async remove(id) {
         const user = await this.findById(id);
         if (!user) {
-            throw new common_2.NotFoundException(`User with id ${id} not found`);
+            throw new common_1.NotFoundException(`User with id ${id} not found`);
         }
-        await user.destroy();
+        await this.userRepo.remove(user);
     }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, sequelize_1.InjectModel)(user_entity_1.User)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, typeorm_2.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_1.Repository])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map

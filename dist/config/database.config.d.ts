@@ -1,3 +1,3 @@
-import { SequelizeModuleOptions } from '@nestjs/sequelize';
-declare const _default: (() => SequelizeModuleOptions) & import("@nestjs/config").ConfigFactoryKeyHost<SequelizeModuleOptions>;
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+declare const _default: (() => TypeOrmModuleOptions) & import("@nestjs/config").ConfigFactoryKeyHost<TypeOrmModuleOptions>;
 export default _default;

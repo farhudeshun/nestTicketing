@@ -14,28 +14,32 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessagesService = void 0;
 const common_1 = require("@nestjs/common");
-const sequelize_1 = require("@nestjs/sequelize");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
 const message_entity_1 = require("../entities/message.entity");
-const user_entity_1 = require("../../users/entities/user.entity");
-const ticket_entity_1 = require("../../tickets/entities/ticket.entity");
 let MessagesService = class MessagesService {
-    messageModel;
-    constructor(messageModel) {
-        this.messageModel = messageModel;
+    messageRepo;
+    constructor(messageRepo) {
+        this.messageRepo = messageRepo;
     }
     async create(createMessageDto, userId) {
-        return this.messageModel.create({ ...createMessageDto, userId });
+        const message = this.messageRepo.create({
+            ...createMessageDto,
+            user: { id: userId },
+        });
+        return await this.messageRepo.save(message);
     }
     async findAllByTicket(ticketId) {
-        return this.messageModel.findAll({
-            where: { ticketId },
-            include: [user_entity_1.User, ticket_entity_1.Ticket],
-            order: [['createdAt', 'ASC']],
+        return this.messageRepo.find({
+            where: { ticket: { id: ticketId } },
+            relations: ['user', 'ticket'],
+            order: { createdAt: 'ASC' },
         });
     }
     async findOne(id) {
-        const message = await this.messageModel.findByPk(id, {
-            include: [user_entity_1.User, ticket_entity_1.Ticket],
+        const message = await this.messageRepo.findOne({
+            where: { id },
+            relations: ['user', 'ticket'],
         });
         if (!message) {
             throw new common_1.NotFoundException(`Message with ID ${id} not found`);
@@ -43,14 +47,16 @@ let MessagesService = class MessagesService {
         return message;
     }
     async remove(id) {
-        const message = await this.findOne(id);
-        await message.destroy();
+        const result = await this.messageRepo.delete(id);
+        if (result.affected === 0) {
+            throw new common_1.NotFoundException(`Message with ID ${id} not found`);
+        }
     }
 };
 exports.MessagesService = MessagesService;
 exports.MessagesService = MessagesService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, sequelize_1.InjectModel)(message_entity_1.Message)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, typeorm_1.InjectRepository)(message_entity_1.Message)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], MessagesService);
 //# sourceMappingURL=messages.service.js.map

@@ -1,7 +1,6 @@
-import { Model } from 'sequelize-typescript';
 import { User } from './user.entity';
-export declare class Role extends Model<Role> {
-    id: string;
+export declare class Role {
+    id: number;
     name: string;
     users: User[];
 }

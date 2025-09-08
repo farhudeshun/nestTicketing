@@ -1,8 +1,7 @@
-import { Model } from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
 import { Ticket } from '../../tickets/entities/ticket.entity';
-export declare class Department extends Model<Department> {
-    id: string;
+export declare class Department {
+    id: number;
     name: string;
     users: User[];
     tickets: Ticket[];

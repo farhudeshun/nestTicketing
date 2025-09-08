@@ -31,6 +31,7 @@ export class Ticket {
 
   @Column({ nullable: false, length: 128 })
   title: string;
+
   @Column({ nullable: false, type: 'text' })
   description: string;
 
@@ -49,8 +50,12 @@ export class Ticket {
 
   @ManyToOne(() => User, (user) => user.createdTickets)
   createBy: User;
+
   @ManyToOne(() => User, (user) => user.assignedTickets)
   assignTo: User;
+
+  @ManyToOne(() => Department, (department) => department.tickets, {})
+  department: Department;
 
   @OneToMany(() => Message, (message) => message.ticket)
   messages: Message[];

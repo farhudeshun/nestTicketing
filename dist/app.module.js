@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
-const sequelize_1 = require("@nestjs/sequelize");
+const typeorm_1 = require("@nestjs/typeorm");
 const core_1 = require("@nestjs/core");
 const database_config_1 = __importDefault(require("./config/database.config"));
 const auth_module_1 = require("./auth/auth.module");
@@ -25,7 +25,6 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const user_entity_1 = require("./users/entities/user.entity");
 const role_entity_1 = require("./users/entities/role.entity");
-const user_role_entity_1 = require("./users/entities/user-role.entity");
 const ticket_entity_1 = require("./tickets/entities/ticket.entity");
 const department_entity_1 = require("./departments/entities/department.entity");
 const message_entity_1 = require("./messages/entities/message.entity");
@@ -40,7 +39,7 @@ exports.AppModule = AppModule = __decorate([
                 load: [database_config_1.default],
                 envFilePath: '.env',
             }),
-            sequelize_1.SequelizeModule.forRootAsync({
+            typeorm_1.TypeOrmModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: (configService) => {
@@ -49,10 +48,14 @@ exports.AppModule = AppModule = __decorate([
                         throw new Error('Database configuration not found');
                     }
                     return {
-                        ...dbConfig,
-                        models: [user_entity_1.User, role_entity_1.Role, user_role_entity_1.UserRole, ticket_entity_1.Ticket, department_entity_1.Department, message_entity_1.Message],
-                        autoLoadModels: true,
-                        synchronize: true,
+                        type: 'postgres',
+                        host: dbConfig.host || 'localhost',
+                        port: dbConfig.port || 5432,
+                        username: dbConfig.username || 'postgres',
+                        password: dbConfig.password || 'password',
+                        database: dbConfig.database || 'mydb',
+                        entities: [user_entity_1.User, role_entity_1.Role, ticket_entity_1.Ticket, department_entity_1.Department, message_entity_1.Message],
+                        synchronize: false,
                     };
                 },
             }),

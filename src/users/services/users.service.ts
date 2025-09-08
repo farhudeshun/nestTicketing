@@ -1,45 +1,48 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private userModel: typeof User) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return this.userModel.create(createUserDto as any);
+    const user = this.userRepo.create(createUserDto);
+    return this.userRepo.save(user);
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.findAll();
+    return this.userRepo.find();
   }
 
-  async findById(id: string): Promise<User | null> {
-    return this.userModel.findByPk(id);
+  async findById(id: number): Promise<User | null> {
+    return this.userRepo.findOne({ where: { id } });
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ where: { email } });
+    return this.userRepo.findOne({ where: { email } });
   }
 
-  async updateUser(
-    id: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<[number, User[]]> {
-    return this.userModel.update(updateUserDto, {
-      where: { id },
-      returning: true,
-    });
-  }
-
-  async remove(id: string): Promise<void> {
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    await user.destroy();
+    Object.assign(user, updateUserDto);
+    return this.userRepo.save(user);
+  }
+
+  async remove(id: number): Promise<void> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    await this.userRepo.remove(user);
   }
 }

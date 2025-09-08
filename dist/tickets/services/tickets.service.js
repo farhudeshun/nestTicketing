@@ -14,26 +14,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TicketsService = void 0;
 const common_1 = require("@nestjs/common");
-const sequelize_1 = require("@nestjs/sequelize");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
 const ticket_entity_1 = require("../entities/ticket.entity");
-const user_entity_1 = require("../../users/entities/user.entity");
-const department_entity_1 = require("../../departments/entities/department.entity");
 let TicketsService = class TicketsService {
-    ticketModel;
-    constructor(ticketModel) {
-        this.ticketModel = ticketModel;
+    ticketRepo;
+    constructor(ticketRepo) {
+        this.ticketRepo = ticketRepo;
     }
     async create(createTicketDto, userId) {
-        return this.ticketModel.create({ ...createTicketDto, userId });
+        const ticket = this.ticketRepo.create({
+            ...createTicketDto,
+            createBy: { id: userId },
+        });
+        return this.ticketRepo.save(ticket);
     }
     async findAll() {
-        return this.ticketModel.findAll({
-            include: [{ model: user_entity_1.User, as: 'creator' }, { model: user_entity_1.User, as: 'support' }, department_entity_1.Department],
+        return this.ticketRepo.find({
+            relations: ['createBy', 'assignTo', 'department'],
         });
     }
     async findOne(id) {
-        const ticket = await this.ticketModel.findByPk(id, {
-            include: [{ model: user_entity_1.User, as: 'creator' }, { model: user_entity_1.User, as: 'support' }, department_entity_1.Department],
+        const ticket = await this.ticketRepo.findOne({
+            where: { id },
+            relations: ['createBy', 'assignTo', 'department'],
         });
         if (!ticket) {
             throw new common_1.NotFoundException(`Ticket with ID ${id} not found`);
@@ -41,31 +45,30 @@ let TicketsService = class TicketsService {
         return ticket;
     }
     async update(id, updateTicketDto) {
-        const [affectedCount, affectedRows] = await this.ticketModel.update(updateTicketDto, {
-            where: { id },
-            returning: true,
+        const ticket = await this.ticketRepo.preload({
+            id,
+            ...updateTicketDto,
         });
-        if (affectedCount === 0) {
+        if (!ticket) {
             throw new common_1.NotFoundException(`Ticket with ID ${id} not found`);
         }
-        return [affectedCount, affectedRows];
+        return this.ticketRepo.save(ticket);
     }
     async remove(id) {
         const ticket = await this.findOne(id);
-        await ticket.destroy();
+        await this.ticketRepo.remove(ticket);
     }
     async assignToSupport(ticketId, supportId) {
-        const [affectedCount, affectedRows] = await this.ticketModel.update({ supportId, assignedDate: new Date() }, { where: { id: ticketId }, returning: true });
-        if (affectedCount === 0) {
-            throw new common_1.NotFoundException(`Ticket with ID ${ticketId} not found`);
-        }
-        return [affectedCount, affectedRows];
+        const ticket = await this.findOne(ticketId);
+        ticket.assignTo = { id: supportId };
+        ticket.assignedDate = new Date();
+        return this.ticketRepo.save(ticket);
     }
 };
 exports.TicketsService = TicketsService;
 exports.TicketsService = TicketsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, sequelize_1.InjectModel)(ticket_entity_1.Ticket)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, typeorm_1.InjectRepository)(ticket_entity_1.Ticket)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], TicketsService);
 //# sourceMappingURL=tickets.service.js.map

@@ -6,7 +6,7 @@ export declare class DepartmentsController {
     constructor(departmentsService: DepartmentsService);
     create(createDepartmentDto: CreateDepartmentDto): Promise<import("../entities/department.entity").Department>;
     findAll(): Promise<import("../entities/department.entity").Department[]>;
-    findOne(id: string): Promise<import("../entities/department.entity").Department | null>;
-    update(id: string, updateDepartmentDto: UpdateDepartmentDto): Promise<[number, import("../entities/department.entity").Department[]]>;
-    remove(id: string): Promise<void>;
+    findOne(id: number): Promise<import("../entities/department.entity").Department | null>;
+    update(id: number, updateDepartmentDto: UpdateDepartmentDto): Promise<import("../entities/department.entity").Department>;
+    remove(id: number): Promise<void>;
 }

@@ -9,6 +9,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  JoinTable,
 } from 'typeorm';
 import { userState } from '@ngn-net/giftcard-shared';
 
@@ -26,9 +27,11 @@ export class User {
 
   @Column({ unique: true, nullable: true })
   email?: string;
+
   @Column({ unique: true, nullable: true })
   phone?: string;
-  @Column({ enum: userState })
+
+  @Column({ type: 'enum', enum: userState })
   state: userState;
 
   @Column()
@@ -36,16 +39,21 @@ export class User {
 
   @Column()
   fullName: string;
-  @ManyToMany(() => Role, (role) => role.users)
+
+  @Column({ nullable: false })
+  password: string;
+
+  @ManyToMany(() => Role, (role) => role.users, { eager: true })
+  @JoinTable()
   roles: Role[];
 
   @ManyToMany(() => Department, (dep) => dep.users)
   department: Department;
 
-  @OneToMany(() => Ticket, (tic) => tic.createBy)
+  @OneToMany(() => Ticket, (ticket) => ticket.createBy)
   createdTickets: Ticket[];
 
-  @OneToMany(() => Ticket, (tic) => tic.assignTo)
+  @OneToMany(() => Ticket, (ticket) => ticket.assignTo)
   assignedTickets: Ticket[];
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
